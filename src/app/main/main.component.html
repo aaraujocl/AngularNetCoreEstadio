@@ -1,0 +1,261 @@
+<!-- ======= Our Team Section ======= -->
+<!-- ======= Services Section ======= -->
+<section id="services" class="services">
+  <div class="container">
+
+
+
+    <div class="row">
+      <div class="col-lg-4 col-md-6 icon-box" data-aos="fade-up">
+        <div class="icon"><i class="icofont-computer"></i></div>
+        <h4 class="title">{{Estadio.nombre}}<a routerLink="" style="cursor: pointer;">
+            </a>
+            <div data-toggle="modal" style="cursor: pointer;" data-target="#updateCapacidad">
+              <i class="icofont-pencil"></i>
+            </div>
+        </h4>
+        <p class="description">Capacidad Total: {{Estadio.capacidadTotal}}</p>
+        <p class="description">Capacidad Permitida: {{Estadio.capacidadPermitida}}</p>
+      </div>
+    </div>
+
+  </div>
+</section><!-- End Services Section -->
+
+
+
+<section id="team" class="team">
+  <div class="container">
+
+    <div class="section-title">
+      <h2>Control de Entrada y Salidas Juego</h2>
+      <p>y Control de capacidad Controlada</p>
+    </div>
+
+    <div class="row">
+      <div *ngFor="let entrada of ListEntradas" class="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up">
+        <div class="member">
+          <div class="pic"><img src="assets/img/entradas.jpg" style="width: 280px;height: 200px;" class="img-fluid"
+              alt=""></div>
+          <div class="member-info">
+            <h4>{{entrada.nombre}}</h4>
+            <span>{{entrada.nombre}}</span>
+            <div class="social">
+              <div data-toggle="modal" style="cursor: pointer;" (click)="administrarentrada(entrada.idEntrada)" data-target="#addUserCapacitador">
+                <i class="icofont-notepad"></i>Entrada
+              </div>
+              <div data-toggle="modal" style="cursor: pointer;" (click)="administrarsalida()" data-target="#addUserCapacitador">
+                <i class="icofont-notepad"></i>Salida
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section><!-- End Our Team Section -->
+
+<!-- ======= Counts Section ======= -->
+<section class="counts section-bg">
+  <div class="container">
+
+    <div class="row">
+
+      <div class="col-lg-4 col-md-6 text-center" data-aos="fade-up">
+        <div class="count-box">
+          <i class="icofont-chart-bar-graph" style="color: #20b38e;"></i>
+          <span data-toggle="counter-up">{{Estadio.capacidadPermitida}}</span>
+          <p>Capacidad Permitida</p>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6 text-center" data-aos="fade-up" data-aos-delay="200">
+        <div class="count-box">
+          <i class="icofont-settings" style="color: #c042ff;"></i>
+          <span data-toggle="counter-up">{{capacidaddisponible}}</span>
+          <p>Capacidad Disponible</p>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6 text-center" data-aos="fade-up" data-aos-delay="400">
+        <div class="count-box">
+          <i class="icofont-users-alt-5" style="color: #46d1ff;"></i>
+          <span data-toggle="counter-up">{{totalasientosocupados}}</span>
+          <p>Asientos Ocupados</p>
+        </div>
+      </div>
+
+
+    </div>
+
+  </div>
+</section><!-- End Counts Section -->
+<ngx-charts-bar-vertical
+    [view]="[1000,400]"
+    [results]="saleData"
+    [xAxisLabel]="'Ocupacion y Disponibilidad'"
+    [legendTitle]="'Hinchas en el Juego'"
+    [yAxisLabel]="'Hinchas'"
+    [legend]="true"
+    [showXAxisLabel]="true"
+    [showYAxisLabel]="true"
+    [xAxis]="true"
+    [yAxis]="true"
+    [gradient]="true">
+</ngx-charts-bar-vertical>
+
+<div aria-hidden="true" aria-labelledby="modalAutorizarTitle" class="modal fade" id="addUserCapacitador" role="dialog"
+  tabindex="-1" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="max-width: 670px;">
+    <!-- INICIO MODAL ANGULAR <ng-template #modalAutorizar let-modal>   -->
+    <div class="modal-content p-2">
+      <div class="modal-header border-0 pb-0">
+        <br>
+        <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span
+            aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body body-padding">
+        <h4 class="modal-title" id="exampleModalLongTitle">Registrar Hincha</h4>
+        <div *ngIf="totalasientosocupados >= capacidaddisponible">
+          <h4 class="modal-title" id="exampleModalLongTitle">No hay asientos disponibles</h4>
+        </div>
+
+        <div *ngIf="!alguardarhincha">
+        <form #hinchacolaborador="ngForm" (ngSubmit)="agregarHincha(hinchacolaborador)" name="hinchacolaborador" class="php-email-form">
+          <!-- ======= Contact Us Section ======= -->
+          <section id="contact" class="contact">
+            <div class="container">
+              <div class="section-title">
+                <h2>Registrar Entrada</h2>
+              </div>
+              <div class="row">
+                <div class="col-lg-12" data-aos="fade-up" data-aos-delay="300">
+                  <div class="form-row">
+                    <div class="col-lg-12 form-group">
+                      <input type="text" class="form-control" [disabled]="alguardarhincha" name="nombre" id="nombre"
+                        placeholder="Nombre" data-rule="minlen:4" [(ngModel)]="hincha.nombre"
+                        data-msg="Introduzca el Nombre" required />
+                      <div class="validate"></div>
+                    </div>
+                  </div>
+
+                  <div class="text-center"><button type="submit" [disabled]="totalasientosocupados >= capacidaddisponible">Enviar</button></div>
+                </div>
+              </div>
+            </div>
+          </section><!-- End Contact Us Section -->
+        </form>
+      </div>
+
+        <div *ngIf="alguardarhincha">
+          <form #registrarentradaHincha="ngForm" (ngSubmit)="registrarEntrada(registrarentradaHincha)" name="registrarentradaHincha" class="php-email-form">
+            <!-- ======= Contact Us Section ======= -->
+            <section id="contact" class="contact">
+              <div class="container">
+                <div class="section-title">
+                  <h2>Registrar Entrada</h2>
+                </div>
+                <div class="row">
+                  <div class="col-lg-12" data-aos="fade-up" data-aos-delay="300">
+                    <div class="form-row">
+                      <div class="col-lg-12 form-group">
+                        <input type="text" class="form-control" name="Asiento" id="Asiento" placeholder="Asiento"
+                          data-rule="minlen:4" [(ngModel)]="controlentrada.Asiento" data-msg="Introduzca el Asiento"
+                          required />
+                        <div class="validate"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="text-center"><button type="submit">Enviar</button></div>
+                  <div class="text-center"><button (click)="cancelarregistro()" type="button" data-dismiss="modal" #cerrarregistro>Cancelar</button></div>
+
+                </div>
+              </div>
+            </section><!-- End Contact Us Section -->
+          </form>
+
+        </div>
+
+      </div>
+    </div><!-- </ng-template> FIN MODAL ANGULAR-->
+  </div>
+</div>
+
+
+<!--  INICIO MODAL ACTUALIZAR CAPACIDAD ANGULAR-->
+
+<div aria-hidden="true" aria-labelledby="modalAutorizarTitle" class="modal fade" id="updateCapacidad" role="dialog"
+  tabindex="-1" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="max-width: 670px;">
+    <!-- INICIO MODAL ANGULAR <ng-template #modalAutorizar let-modal>   -->
+    <div class="modal-content p-2">
+      <div class="modal-header border-0 pb-0">
+        <br>
+        <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span
+            aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body body-padding">
+        <h4 class="modal-title" id="exampleModalLongTitle">Capacidad Estadio</h4>
+          <form #actualizarEstadioForm="ngForm" (ngSubmit)="modificarcapacidad(actualizarEstadioForm)" name="actualizarEstadioForm" class="php-email-form">
+            <!-- ======= Contact Us Section ======= -->
+            <section id="contact" class="contact">
+              <div class="container">
+                <div class="section-title">
+                  <h2>Actualizar Capacidad</h2>
+                </div>
+                <div class="row">
+                  <div class="col-lg-12" data-aos="fade-up" data-aos-delay="300">
+                    <div class="form-row">
+                      <div class="col-lg-12 form-group">
+                        <input type="text"
+                        class="form-control"
+                        name="capacidadtotal"
+                        id="capacidadtotal"
+                        [(ngModel)]="Estadio.capacidadTotal"
+                        [disabled]="true"
+                        required />
+
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="col-lg-12 form-group">
+                        <input type="text"
+                        class="form-control"
+                        name="porcentaje"
+                        id="porcentaje"
+                        [(ngModel)]="Estadio.porcentaje"
+                        required
+                        placeholder="% Permitido"
+                        data-rule="minlen:4"
+                        data-msg="Introduzca un Valor numerico"/>
+                        <a routerLink="" (click)="calcular()" style="cursor: pointer;"><i class="icofont-pencil">Calcular</i></a>
+                        <div class="validate"></div>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="col-lg-12 form-group">
+                        <input type="text"
+                        class="form-control"
+                        name="capacidadpermitida"
+                        id="capacidadpermitida"
+                        [(ngModel)]="Estadio.capacidadPermitida"
+                        [disabled]="true"
+                        required />
+
+                      </div>
+                    </div>
+                  </div>
+                  <div class="text-center"><button type="submit">Enviar</button></div>
+                  <div class="text-center"><button (click)="cancelarestadio()" type="button" data-dismiss="modal" #cerrarestadio>Cancelar</button></div>
+
+                </div>
+              </div>
+            </section><!-- End Contact Us Section -->
+          </form>
+        </div>
+      </div>
+    </div><!-- </ng-template> FIN MODAL ANGULAR-->
+  </div>
+
